@@ -13,5 +13,6 @@ namespace e_Movies_Platform.Data
         public DbSet<e_Movies_Platform.Models.Genre> Genre { get; set; }
         public DbSet<e_Movies_Platform.Models.CastCrewRole> CastCrewRole { get; set; }
         public DbSet<e_Movies_Platform.Models.CastCrew> CastCrew { get; set; }
+        public DbSet<e_Movies_Platform.Models.Movie> Movie { get; set; }
     }
 }
