@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace e_Movies_Platform.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class GenresController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,12 +22,14 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Genres
+        [Authorize]
         public async Task<IActionResult> Index()
         {
               return View(await _context.Genre.ToListAsync());
         }
 
         // GET: Genres/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Genre == null)
@@ -44,6 +48,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Genres/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +59,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,GenreName")] Genre genre)
         {
             if (ModelState.IsValid)
@@ -66,6 +72,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Genres/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Genre == null)
@@ -86,6 +93,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,GenreName")] Genre genre)
         {
             if (id != genre.Id)
@@ -117,6 +125,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Genres/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Genre == null)
@@ -137,6 +146,7 @@ namespace e_Movies_Platform.Controllers
         // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Genre == null)

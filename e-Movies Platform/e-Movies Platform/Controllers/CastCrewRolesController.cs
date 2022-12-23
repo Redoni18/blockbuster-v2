@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace e_Movies_Platform.Controllers
 {
+
+    [Authorize]
     public class CastCrewRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -44,6 +47,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrewRoles/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +58,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("id,Role")] CastCrewRole castCrewRole)
         {
             if (ModelState.IsValid)
@@ -66,6 +71,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrewRoles/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.CastCrewRole == null)
@@ -86,6 +92,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("id,Role")] CastCrewRole castCrewRole)
         {
             if (id != castCrewRole.id)
@@ -117,6 +124,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrewRoles/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.CastCrewRole == null)
@@ -137,6 +145,7 @@ namespace e_Movies_Platform.Controllers
         // POST: CastCrewRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.CastCrewRole == null)

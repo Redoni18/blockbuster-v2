@@ -1,5 +1,7 @@
 ﻿using e_Movies_Platform.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Diagnostics;
 
 namespace e_Movies_Platform.Controllers

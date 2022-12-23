@@ -9,9 +9,12 @@ using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
 using e_Movies_Platform.ViewModels;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Authorization;
 
 namespace e_Movies_Platform.Controllers
 {
+
+    [Authorize]
     public class CastCrewsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -47,6 +50,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrews/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             //List<CastCrewRole> roles = _context.CastCrewRole.Select(x => new CastCrewRole { Value = x.Id.ToString(), Text = x.Role}).ToList();
@@ -62,6 +66,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(CastCrewViewModel model)
         {
             var role = await this._context.CastCrewRole.FindAsync(model.RoleId);
@@ -79,6 +84,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrews/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.CastCrew == null)
@@ -102,6 +108,7 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id, [Bind("Id,FullName")] CastCrew castCrew)
         {
             if (id != castCrew.Id)
@@ -133,6 +140,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: CastCrews/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.CastCrew == null)
@@ -153,6 +161,7 @@ namespace e_Movies_Platform.Controllers
         // POST: CastCrews/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int? id)
         {
             if (_context.CastCrew == null)
