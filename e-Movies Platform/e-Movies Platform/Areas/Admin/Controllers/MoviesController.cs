@@ -11,7 +11,7 @@ using e_Movies_Platform.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 
-namespace e_Movies_Platform.Controllers
+namespace e_Movies_Platform.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
@@ -25,7 +25,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Index()
         {
             List<Movie> movies = await _context.Movie.Include(m => m.Genre).ToListAsync();
@@ -33,7 +33,7 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Details/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Movie == null)
@@ -52,8 +52,8 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Create
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             List<Genre> genres = this._context.Genre.ToList();
@@ -68,8 +68,8 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(MovieViewModel model)
         {
             var genre = await this._context.Genre.FindAsync(model.GenreId);
@@ -90,8 +90,8 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Edit/5
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Movie == null)
@@ -112,8 +112,8 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year")] Movie movie)
         {
             if (id != movie.Id)
@@ -145,8 +145,8 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Delete/5
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Movie == null)
@@ -167,8 +167,8 @@ namespace e_Movies_Platform.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Movie == null)

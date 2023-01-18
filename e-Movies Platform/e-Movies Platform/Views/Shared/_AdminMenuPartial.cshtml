@@ -1,0 +1,15 @@
+﻿<li class="nav-item dropdown">
+	<a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Admin</a>
+	<div class="dropdown-menu show" data-bs-popper="static">
+		<a class="dropdown-item" asp-area="Admin" asp-controller="Movies" asp-action="Index">
+			<i class="fas fa-box mr-2"></i>Movies
+		</a>
+		<a class="dropdown-item" asp-area="Admin" asp-controller="Genres" asp-action="Index">
+			<i class="fas fa-users mr-2"></i>Genres
+		</a>
+		<div class="dropdown-divider"></div>
+		<a class="dropdown-item" asp-area="Admin" asp-controller="CastCrews" asp-action="Index">
+			<i class="fas fa-file-video mr-2"></i>Cast and Crew
+		</a>
+	</div>
+</li>

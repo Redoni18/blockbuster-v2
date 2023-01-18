@@ -1,0 +1,70 @@
+﻿@model e_Movies_Platform.ViewModels.MovieViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="w-50 offset-3">
+
+    <div>
+        <h1 class="text-center">Create Movie</h1>
+    </div>
+    <hr />
+    <div class="row">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoverImage" class="control-label"></label>
+                <input asp-for="CoverImage" class="form-control" />
+                <span asp-validation-for="CoverImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieLink" class="control-label"></label>
+                <input asp-for="MovieLink" class="form-control" />
+                <span asp-validation-for="MovieLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsPG" class="control-label"></label>
+                <input asp-for="IsPG" class="form-control" />
+                <span asp-validation-for="IsPG" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genres" class="control-label"></label>
+                <select asp-for="GenreId" class="form-select form-control">
+                    @foreach (Genre genre in Model.Genres)
+                    {
+                        <option value="@genre.Id">@genre.GenreName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary w-100 mt-2" />
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <a class="btn mt-5 btn-info back-button" asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

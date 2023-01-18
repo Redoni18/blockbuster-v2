@@ -1,0 +1,61 @@
+﻿@model IEnumerable<e_Movies_Platform.Models.CastCrew>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="w-50 offset-3">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Cast&Crews</h1>
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <p class="m-0">
+                <a class="btn btn-primary" asp-action="Create">Create New</a>
+            </p>
+        }
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Role)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="genre-details">
+                   @Html.DisplayFor(modelItem => item.FullName)
+                </a>
+            </td>
+            <td>
+                 <a asp-action="Details" asp-route-id="@item.Id" class="genre-details">
+                     @item.Role?.Role
+                </a>
+            </td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <td>
+                            <div class="d-flex align-items-center gap-2 justify-content-end">
+                                <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
+
+                        </td>
+
+                    }
+        </tr>
+}
+    </tbody>
+</table>
+</div>
