@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrator")]
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;

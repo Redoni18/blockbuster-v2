@@ -13,7 +13,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrator")]
     public class CastCrewRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
