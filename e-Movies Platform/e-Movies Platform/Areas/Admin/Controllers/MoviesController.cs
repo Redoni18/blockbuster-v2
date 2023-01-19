@@ -10,6 +10,8 @@ using e_Movies_Platform.Models;
 using e_Movies_Platform.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using e_Movies_Platform.Data.Migrations;
+using EllipticCurve;
 
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
@@ -28,7 +30,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         //[Authorize]
         public async Task<IActionResult> Index()
         {
-            List<Movie> movies = await _context.Movie.Include(m => m.Genre).ToListAsync();
+            List<Movie> movies = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast).ToListAsync();
             return View(movies);
         }
 
@@ -41,8 +43,11 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
+            var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+
+
             if (movie == null)
             {
                 return NotFound();
@@ -57,9 +62,11 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         public IActionResult Create()
         {
             List<Genre> genres = this._context.Genre.ToList();
+            List<CastCrew> cast = this._context.CastCrew.ToList();
             MovieViewModel model = new MovieViewModel();
 
             model.Genres = genres;
+            model.Cast = cast;
             return View(model);
         }
 
@@ -73,6 +80,12 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         public async Task<IActionResult> Create(MovieViewModel model)
         {
             var genre = await this._context.Genre.FindAsync(model.GenreId);
+            var cast = new List<CastCrew>();
+            foreach(int castId in model.CastId)
+            {
+                var castMember = await this._context.CastCrew.FindAsync(castId);
+                cast.Add(castMember);
+            }
 
             var movie = new Movie();
             movie.Title = model.Title;
@@ -82,6 +95,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             movie.MovieLink = model.MovieLink;
             movie.Genre = genre;
             movie.Year = model.Year;
+            movie.Cast = cast;
 
             this._context.Movie.Add(movie);
             this._context.SaveChanges();

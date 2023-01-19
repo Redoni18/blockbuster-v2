@@ -13,6 +13,8 @@ namespace e_Movies_Platform.ViewModels
         public int? Year { get; set; }
         public List<Genre>? Genres { get; set; }
         public int? GenreId { get; set; }
+        public List<CastCrew>? Cast { get; set; }
+        public List<int>? CastId { get; set; }
     }
 }
 

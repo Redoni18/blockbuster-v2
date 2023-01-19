@@ -19,5 +19,6 @@ namespace e_Movies_Platform.Models
         public int? Year { get; set; }
         [Required]
         public Genre? Genre { get; set; }
+        public ICollection<CastCrew>? Cast { get; set; }
     }
 }
