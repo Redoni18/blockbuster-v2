@@ -1,4 +1,4 @@
-﻿@model e_Movies_Platform.Models.Movie
+﻿@model e_Movies_Platform.ViewModels.MovieViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -33,15 +33,41 @@
                 <input asp-for="MovieLink" class="form-control" />
                 <span asp-validation-for="MovieLink" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsPG" class="control-label"></label>
-                <input asp-for="IsPG" class="form-control" />
-                <span asp-validation-for="IsPG" class="text-danger"></span>
+            <div class="form-group d-inline-block">
+                <label class="control-label" asp-for="IsPG">
+                    Is PG?
+                </label>
+                <input class="form-check-input" type="checkbox" asp-for="IsPG" />
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
                 <input asp-for="Year" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genre" class="control-label"></label>
+                <input asp-for="Genre.GenreName" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director" class="control-label"></label>
+                <select asp-for="DirectorId" class="form-select form-control">
+                    @foreach (CastCrew director in Model.Cast)
+                        if (director.Role.Role.ToString().Equals("Director"))
+                        {
+                            <option value="@director.Id">@director.FullName</option>
+                        }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cast" class="control-label"></label>
+                <select asp-for="CastId" multiple class="form-select form-control">
+                    @foreach (CastCrew cast in Model.Cast)
+                        if (cast.Role.Role.ToString().Equals("Actor"))
+                        {
+                            <option value="@cast.Id">@cast.FullName</option>
+                        }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary w-100 mt-2" />

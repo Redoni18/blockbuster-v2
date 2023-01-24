@@ -14,7 +14,7 @@ namespace e_Movies_Platform.Models
         [Required]
         public string? MovieLink { get; set; }
         [Required]
-        public bool? IsPG { get; set; } = true;
+        public bool? IsPG { get; set; } = false;
         [Required]
         public int? Year { get; set; }
         [Required]

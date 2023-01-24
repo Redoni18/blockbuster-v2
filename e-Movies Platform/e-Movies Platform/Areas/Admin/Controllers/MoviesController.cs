@@ -43,10 +43,10 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+
             var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-
 
             if (movie == null)
             {
@@ -63,10 +63,12 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         {
             List<Genre> genres = this._context.Genre.ToList();
             List<CastCrew> cast = this._context.CastCrew.ToList();
-            MovieViewModel model = new MovieViewModel();
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+            MovieViewModel model = new MovieViewModel(); 
 
             model.Genres = genres;
             model.Cast = cast;
+            model.Roles = roles;
             return View(model);
         }
 
@@ -86,7 +88,8 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
                 var castMember = await this._context.CastCrew.FindAsync(castId);
                 cast.Add(castMember);
             }
-
+            var director = await this._context.CastCrew.FindAsync(model.DirectorId);
+            cast.Add(director);
             var movie = new Movie();
             movie.Title = model.Title;
             movie.Description = model.Description;
@@ -112,13 +115,47 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            List<Genre> genres = this._context.Genre.ToList();
+            List<CastCrew> cast = this._context.CastCrew.ToList();
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
 
-            var movie = await _context.Movie.FindAsync(id);
+            
+            var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)   
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-            return View(movie);
+             
+
+
+            MovieViewModel model = new MovieViewModel();
+            model.Id = movie.Id;
+            model.Title = movie.Title;
+            model.Description = movie.Description;
+            model.CoverImage = movie.CoverImage;
+            model.MovieLink = movie.MovieLink;
+            model.Year = movie.Year;
+            model.IsPG = (bool)movie.IsPG;
+            model.GenreId = movie.Genre.Id;
+            model.Genres = genres;
+            model.Genre = movie.Genre;
+            model.Director = (CastCrew?)movie.Cast.Where(c => c.Role.Role == "Director").FirstOrDefault();
+            model.SelectedCast = movie.Cast.Where(c => c.Role.Role == "Actor").ToList();
+            model.Cast = cast;
+            
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            
+
+            
+
+            return View(model);
         }
 
         // POST: Movies/Edit/5
@@ -128,7 +165,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         //[Authorize]
         //[Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year,Genre,Cast,Director")] Movie movie)
         {
             if (id != movie.Id)
             {

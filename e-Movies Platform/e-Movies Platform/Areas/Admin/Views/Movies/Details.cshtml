@@ -53,13 +53,29 @@
             @Html.DisplayFor(model => model.Genre.GenreName)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayName("Director")
+        </dt>
+        @foreach (CastCrew cast in Model.Cast)
+        {
+            if (cast.Role.Role.ToString().Equals("Director"))
+            {
+                <dd class="col-sm-10">
+                    @cast.FullName
+                </dd>
+            }
+        }
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Cast)
         </dt>
         @foreach(CastCrew cast in Model.Cast){
+            if (cast.Role.Role.ToString().Equals("Actor"))
+            {
             <dd class="col-sm-10">
                 @cast.FullName
             </dd>
+            }
         }
+            
             
     </dl>
 </div>
