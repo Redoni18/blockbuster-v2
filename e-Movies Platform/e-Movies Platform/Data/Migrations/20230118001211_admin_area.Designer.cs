@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_Movies_Platform.Data;
 
@@ -11,9 +12,10 @@ using e_Movies_Platform.Data;
 namespace e_Movies_Platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230118001211_admin_area")]
+    partial class admin_area
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace e_Movies_Platform.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("CastCrewMovie", b =>
-                {
-                    b.Property<int>("CastId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CastId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("CastCrewMovie");
-                });
 
             modelBuilder.Entity("e_Movies_Platform.Models.CastCrew", b =>
                 {
@@ -327,21 +314,6 @@ namespace e_Movies_Platform.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CastCrewMovie", b =>
-                {
-                    b.HasOne("e_Movies_Platform.Models.CastCrew", null)
-                        .WithMany()
-                        .HasForeignKey("CastId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("e_Movies_Platform.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.CastCrew", b =>

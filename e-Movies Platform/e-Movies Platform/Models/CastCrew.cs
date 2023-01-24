@@ -11,6 +11,6 @@ namespace e_Movies_Platform.Models
         [Required]
         [Display(Name = "Full Name")]
         public string? FullName { get; set; }
-        
+        public ICollection<Movie>? Movies { get; set; }
     }
 }

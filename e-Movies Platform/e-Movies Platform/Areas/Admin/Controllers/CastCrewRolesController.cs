@@ -7,116 +7,96 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
-using e_Movies_Platform.ViewModels;
-using System.IO;
 using Microsoft.AspNetCore.Authorization;
 
-namespace e_Movies_Platform.Controllers
+namespace e_Movies_Platform.Areas.Admin.Controllers
 {
+
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    public class MoviesController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class CastCrewRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public MoviesController(ApplicationDbContext context)
+        public CastCrewRolesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Movies
-        [Authorize]
+        // GET: CastCrewRoles
         public async Task<IActionResult> Index()
         {
-            List<Movie> movies = await _context.Movie.Include(m => m.Genre).ToListAsync();
-            return View(movies);
+              return View(await _context.CastCrewRole.ToListAsync());
         }
 
-        // GET: Movies/Details/5
-        [Authorize]
+        // GET: CastCrewRoles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.CastCrewRole == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            var castCrewRole = await _context.CastCrewRole
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (castCrewRole == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(castCrewRole);
         }
 
-        // GET: Movies/Create
-        [Authorize]
+        // GET: CastCrewRoles/Create
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
-            List<Genre> genres = this._context.Genre.ToList();
-            MovieViewModel model = new MovieViewModel();
-
-            model.Genres = genres;
-            return View(model);
+            return View();
         }
 
-        // POST: Movies/Create
+        // POST: CastCrewRoles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(MovieViewModel model)
+        public async Task<IActionResult> Create([Bind("id,Role")] CastCrewRole castCrewRole)
         {
-            var genre = await this._context.Genre.FindAsync(model.GenreId);
-
-            var movie = new Movie();
-            movie.Title = model.Title;
-            movie.Description = model.Description;
-            movie.IsPG = model.IsPG;
-            movie.CoverImage = model.CoverImage;
-            movie.MovieLink = model.MovieLink;
-            movie.Genre = genre;
-            movie.Year = model.Year;
-
-            this._context.Movie.Add(movie);
-            this._context.SaveChanges();
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _context.Add(castCrewRole);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(castCrewRole);
         }
 
-        // GET: Movies/Edit/5
-        [Authorize]
+        // GET: CastCrewRoles/Edit/5
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.CastCrewRole == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie == null)
+            var castCrewRole = await _context.CastCrewRole.FindAsync(id);
+            if (castCrewRole == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            return View(castCrewRole);
         }
 
-        // POST: Movies/Edit/5
+        // POST: CastCrewRoles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Role")] CastCrewRole castCrewRole)
         {
-            if (id != movie.Id)
+            if (id != castCrewRole.id)
             {
                 return NotFound();
             }
@@ -125,12 +105,12 @@ namespace e_Movies_Platform.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(castCrewRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!CastCrewRoleExists(castCrewRole.id))
                     {
                         return NotFound();
                     }
@@ -141,53 +121,51 @@ namespace e_Movies_Platform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(castCrewRole);
         }
 
-        // GET: Movies/Delete/5
-        [Authorize]
+        // GET: CastCrewRoles/Delete/5
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.CastCrewRole == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            var castCrewRole = await _context.CastCrewRole
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (castCrewRole == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(castCrewRole);
         }
 
-        // POST: Movies/Delete/5
+        // POST: CastCrewRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Movie == null)
+            if (_context.CastCrewRole == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Movie'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.CastCrewRole'  is null.");
             }
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie != null)
+            var castCrewRole = await _context.CastCrewRole.FindAsync(id);
+            if (castCrewRole != null)
             {
-                _context.Movie.Remove(movie);
+                _context.CastCrewRole.Remove(castCrewRole);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool CastCrewRoleExists(int id)
         {
-            return _context.Movie.Any(e => e.Id == id);
+          return _context.CastCrewRole.Any(e => e.id == id);
         }
     }
 }

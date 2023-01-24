@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 namespace e_Movies_Platform.Controllers
 {
-    public class HomeController : Controller
+    public class HomeeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }

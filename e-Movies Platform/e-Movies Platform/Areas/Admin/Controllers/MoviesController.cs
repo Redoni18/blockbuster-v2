@@ -10,11 +10,13 @@ using e_Movies_Platform.Models;
 using e_Movies_Platform.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using e_Movies_Platform.Data.Migrations;
+using EllipticCurve;
 
-namespace e_Movies_Platform.Controllers
+namespace e_Movies_Platform.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrator")]
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,15 +27,15 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Index()
         {
-            List<Movie> movies = await _context.Movie.Include(m => m.Genre).ToListAsync();
+            List<Movie> movies = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast).ToListAsync();
             return View(movies);
         }
 
         // GET: Movies/Details/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Movie == null)
@@ -41,8 +43,11 @@ namespace e_Movies_Platform.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+
+            var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -52,14 +57,18 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Create
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             List<Genre> genres = this._context.Genre.ToList();
-            MovieViewModel model = new MovieViewModel();
+            List<CastCrew> cast = this._context.CastCrew.ToList();
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+            MovieViewModel model = new MovieViewModel(); 
 
             model.Genres = genres;
+            model.Cast = cast;
+            model.Roles = roles;
             return View(model);
         }
 
@@ -68,12 +77,19 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(MovieViewModel model)
         {
             var genre = await this._context.Genre.FindAsync(model.GenreId);
-
+            var cast = new List<CastCrew>();
+            foreach(int castId in model.CastId)
+            {
+                var castMember = await this._context.CastCrew.FindAsync(castId);
+                cast.Add(castMember);
+            }
+            var director = await this._context.CastCrew.FindAsync(model.DirectorId);
+            cast.Add(director);
             var movie = new Movie();
             movie.Title = model.Title;
             movie.Description = model.Description;
@@ -82,6 +98,7 @@ namespace e_Movies_Platform.Controllers
             movie.MovieLink = model.MovieLink;
             movie.Genre = genre;
             movie.Year = model.Year;
+            movie.Cast = cast;
 
             this._context.Movie.Add(movie);
             this._context.SaveChanges();
@@ -90,21 +107,55 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Edit/5
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Movie == null)
             {
                 return NotFound();
             }
+            List<Genre> genres = this._context.Genre.ToList();
+            List<CastCrew> cast = this._context.CastCrew.ToList();
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
 
-            var movie = await _context.Movie.FindAsync(id);
+            
+            var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)   
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-            return View(movie);
+             
+
+
+            MovieViewModel model = new MovieViewModel();
+            model.Id = movie.Id;
+            model.Title = movie.Title;
+            model.Description = movie.Description;
+            model.CoverImage = movie.CoverImage;
+            model.MovieLink = movie.MovieLink;
+            model.Year = movie.Year;
+            model.IsPG = (bool)movie.IsPG;
+            model.GenreId = movie.Genre.Id;
+            model.Genres = genres;
+            model.Genre = movie.Genre;
+            model.Director = (CastCrew?)movie.Cast.Where(c => c.Role.Role == "Director").FirstOrDefault();
+            model.SelectedCast = movie.Cast.Where(c => c.Role.Role == "Actor").ToList();
+            model.Cast = cast;
+            
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            
+
+            
+
+            return View(model);
         }
 
         // POST: Movies/Edit/5
@@ -112,9 +163,9 @@ namespace e_Movies_Platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year")] Movie movie)
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year,Genre,Cast,Director")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -145,8 +196,8 @@ namespace e_Movies_Platform.Controllers
         }
 
         // GET: Movies/Delete/5
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Movie == null)
@@ -167,8 +218,8 @@ namespace e_Movies_Platform.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Movie == null)
