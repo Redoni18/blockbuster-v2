@@ -2,22 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace e_Movies_Platform.Areas.Identity.Pages.Account
 {
@@ -29,12 +22,14 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -42,6 +37,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 
@@ -110,6 +106,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -120,7 +117,21 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+
                     _logger.LogInformation("User created a new account with password.");
+
+                    string[] roles = { "Administrator", "Default" };
+
+                    foreach (var role in roles)
+                    {
+                        var roleExist = await _roleManager.RoleExistsAsync(role);
+
+                        if (!roleExist)
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole(role));
+                        }
+                    }
+                    await _userManager.AddToRoleAsync(user, "Default");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -143,6 +154,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+
                 }
                 foreach (var error in result.Errors)
                 {
