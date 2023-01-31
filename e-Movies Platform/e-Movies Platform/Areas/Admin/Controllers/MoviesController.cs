@@ -12,6 +12,8 @@ using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using e_Movies_Platform.Data.Migrations;
 using EllipticCurve;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
@@ -143,6 +145,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             model.Genre = movie.Genre;
             model.Director = (CastCrew?)movie.Cast.Where(c => c.Role.Role == "Director").FirstOrDefault();
             model.SelectedCast = movie.Cast.Where(c => c.Role.Role == "Actor").ToList();
+            model.NotSelectedCast =cast.Except(model.SelectedCast).ToList();
             model.Cast = cast;
             
 
@@ -150,12 +153,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            
-
-            
-
-            return View(model);
+          return View(model);
         }
 
         // POST: Movies/Edit/5
@@ -165,12 +163,60 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         //[Authorize]
         //[Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year,Genre,Cast,Director")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CoverImage,MovieLink,IsPG,Year,Cast,Genre,DirectorId,CastId,GenreId")] MovieViewModel model)
         {
+
+            List<Genre> allGenres = this._context.Genre.ToList();
+            List<CastCrew> allCast = this._context.CastCrew.ToList();
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+
+            var movie = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast)
+                .FirstOrDefaultAsync(m => m.Id == id);
+    
+
+            model.Genres = allGenres;
+            model.Cast = allCast;
+            model.Roles = roles;
+
+            var cast = new List<CastCrew>();
+            foreach (int castId in model.CastId)
+            {
+                var castMember = await this._context.CastCrew.FindAsync(castId);
+                cast.Add(castMember);
+            }
+            var director = await this._context.CastCrew.FindAsync(model.DirectorId);
+            cast.Add(director);
+            model.Director = director;
+
+            List<CastCrew> updatedCast = cast.Union(movie.Cast.Intersect(cast)).ToList();
+            model.SelectedCast = updatedCast;
+            model.NotSelectedCast = updatedCast.Except(updatedCast).ToList();
+
+            movie.Title = model.Title;
+            movie.Description = model.Description;
+            movie.IsPG = model.IsPG;
+            movie.CoverImage = model.CoverImage;
+            movie.MovieLink = model.MovieLink;
+            movie.Year = model.Year;
+            movie.Cast = updatedCast;
+
+            var genre = await this._context.Genre.FindAsync(model.Genre.Id);
+            movie.Genre = genre;
+
             if (id != movie.Id)
             {
                 return NotFound();
             }
+
+            //IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+
+            //var errors = ModelState.Keys
+            //       .Where(k => ModelState[k].Errors.Count > 0)
+            //       .Select(k => new
+            //       {
+            //           propertyName = k,
+            //           errorMessage = ModelState[k].Errors[0].ErrorMessage
+            //       }).ToList();
 
             if (ModelState.IsValid)
             {

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using WebPWrecover.Services;
 using e_Movies_Platform.Services;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using e_Movies_Platform.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
