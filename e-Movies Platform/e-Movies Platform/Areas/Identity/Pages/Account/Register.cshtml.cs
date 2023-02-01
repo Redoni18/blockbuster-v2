@@ -132,7 +132,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                         }
                     }
 
-                    if (user.Email.Equals("redonemini18@gmail.com"))
+                    if (user.Email.Equals("blockbusterxk@gmail.com"))
                     {
                         await _userManager.AddToRoleAsync(user, "Administrator");
                     } else

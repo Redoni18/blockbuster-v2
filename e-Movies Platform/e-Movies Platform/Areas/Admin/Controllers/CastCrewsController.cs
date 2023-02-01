@@ -92,16 +92,25 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            
 
-            var castCrew = await _context.CastCrew.FindAsync(id);
 
-            if (castCrew == null)
+            var castCrew = await _context.CastCrew.Include(c => c.Role)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            List<CastCrewRole> roles = this._context.CastCrewRole.ToList();
+            CastCrewViewModel model = new CastCrewViewModel();
+
+            model.Id = (int)castCrew.Id;
+            model.FullName = castCrew.FullName;
+            model.RoleId = castCrew.Role.id;
+            model.Role = castCrew.Role;
+            model.Roles = roles;
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(castCrew);
+            return View(model);
         }
 
         // POST: CastCrews/Edit/5
@@ -110,12 +119,18 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,FullName")] CastCrew castCrew)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,FullName,RoleId")] CastCrewViewModel model)
         {
+            var castCrew = await _context.CastCrew.Include(c => c.Role)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
             if (id != castCrew.Id)
             {
                 return NotFound();
             }
+            var castCrewRole = await this._context.CastCrewRole.FindAsync(model.RoleId);
+
+            castCrew.Role = castCrewRole;
 
             if (ModelState.IsValid)
             {

@@ -118,7 +118,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    if (Input.Email.Equals("redonemini18@gmail.com"))
+                    if (Input.Email.Equals("blockbusterxk@gmail.com"))
                     {
                         return RedirectToAction("Index", "Movies", new { area = "Admin" });
                     }
