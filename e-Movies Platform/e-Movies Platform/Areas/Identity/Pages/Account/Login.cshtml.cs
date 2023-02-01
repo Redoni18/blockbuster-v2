@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Security.Claims;
 
 namespace e_Movies_Platform.Areas.Identity.Pages.Account
 {
@@ -115,7 +117,12 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+
+                    if (Input.Email.Equals("redonemini18@gmail.com"))
+                    {
+                        return RedirectToAction("Index", "Movies", new { area = "Admin" });
+                    }
+                    return RedirectToAction("Index", "Userarea", new { area = "User" });
                 }
                 if (result.RequiresTwoFactor)
                 {

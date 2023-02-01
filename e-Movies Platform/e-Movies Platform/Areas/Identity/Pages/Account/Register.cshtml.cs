@@ -131,7 +131,14 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                             await _roleManager.CreateAsync(new IdentityRole(role));
                         }
                     }
-                    await _userManager.AddToRoleAsync(user, "Default");
+
+                    if (user.Email.Equals("redonemini18@gmail.com"))
+                    {
+                        await _userManager.AddToRoleAsync(user, "Administrator");
+                    } else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Default");
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
