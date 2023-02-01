@@ -46,27 +46,45 @@
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre.GenreName" class="form-control" />
+                <select asp-for="Genre.Id" class="form-select form-control">
+                    <option value="@Model.Genre.Id" selected="Genre.GenreName">@Model.Genre.GenreName</option>
+                    @foreach (Genre genre in Model.Genres)
+                        if(!(genre.GenreName.Equals(Model.Genre.GenreName)))
+                    {
+                        <option value="@genre.Id">@genre.GenreName</option>
+                    }
+                </select>
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
+            @*<div class="form-group">
+                <label asp-for="Genre" class="control-label"></label>
+                <input asp-for="Genre.GenreName" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>*@
             <div class="form-group">
-                <label asp-for="Director" class="control-label"></label>
-                <select asp-for="DirectorId" class="form-select form-control">
-                    @foreach (CastCrew director in Model.Cast)
-                        if (director.Role.Role.ToString().Equals("Director"))
+                <label asp-for="Director" class="control-label">Director: @Model.Director.FullName</label>
+                <select asp-for="DirectorId"  class="form-select form-control">
+                    <option value="@Model.Director.Id" selected="Director">@Model.Director.FullName</option>
+                    @foreach (CastCrew director in Model.NotSelectedCast)
+                        if (director.Role.Role.ToString().Equals("Director") && director.Id != Model.Director.Id)
                         {
                             <option value="@director.Id">@director.FullName</option>
                         }
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="Cast" class="control-label"></label>
+                <label asp-for="Cast" class="control-label">@Model.SelectedCast.Count</label>
                 <select asp-for="CastId" multiple class="form-select form-control">
-                    @foreach (CastCrew cast in Model.Cast)
-                        if (cast.Role.Role.ToString().Equals("Actor"))
-                        {
-                            <option value="@cast.Id">@cast.FullName</option>
+                    @foreach (CastCrew selectedCast in Model.SelectedCast) {
+                        <option value="@selectedCast.Id" selected>@selectedCast.FullName</option>
+                    }
+
+                    @foreach (CastCrew restCast in Model.NotSelectedCast){
+                        if(restCast.Role.Role.Equals("Actor")){
+                            <option value="@restCast.Id">@restCast.FullName</option>
                         }
+                    }
+
                 </select>
             </div>
             <div class="form-group">
