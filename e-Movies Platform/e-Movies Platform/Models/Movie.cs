@@ -20,5 +20,6 @@ namespace e_Movies_Platform.Models
         [Required]
         public Genre? Genre { get; set; }
         public ICollection<CastCrew>? Cast { get; set; }
+        public ICollection<MovieComment> MoviesComments { get; set; }
     }
 }
