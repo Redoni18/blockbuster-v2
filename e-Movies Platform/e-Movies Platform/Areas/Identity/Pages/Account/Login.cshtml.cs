@@ -16,15 +16,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
+using e_Movies_Platform.Models;
 
 namespace e_Movies_Platform.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -109,6 +110,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -118,7 +120,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    if (Input.Email.Equals("redonemini18@gmail.com"))
+                    if (Input.Email.Equals("blockbusterxk@gmail.com"))
                     {
                         return RedirectToAction("Index", "Movies", new { area = "Admin" });
                     }
