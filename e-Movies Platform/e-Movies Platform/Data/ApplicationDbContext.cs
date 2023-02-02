@@ -4,7 +4,7 @@ using e_Movies_Platform.Models;
 
 namespace e_Movies_Platform.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
