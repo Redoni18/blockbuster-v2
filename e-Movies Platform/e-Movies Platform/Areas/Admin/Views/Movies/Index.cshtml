@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
 
 
@@ -83,3 +92,6 @@
         </tbody>
     </table>
 </div>
+
+
+<partial name="_PagerMovies" model="@pager" />
