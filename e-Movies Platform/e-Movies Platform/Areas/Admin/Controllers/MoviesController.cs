@@ -30,10 +30,27 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 
         // GET: Movies
         //[Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
             List<Movie> movies = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast).ToListAsync();
-            return View(movies);
+
+
+            int recsCount = movies.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var data = movies.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
+
         }
 
         // GET: Movies/Details/5
