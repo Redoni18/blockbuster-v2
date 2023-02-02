@@ -12,22 +12,22 @@
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="Input.Name" class="form-control" aria-required="true" />
                 <label asp-for="Input.Name"></label>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="Input.LastName" class="form-control" aria-required="true" />
                 <label asp-for="Input.LastName"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="Input.Birthday" class="form-control" aria-required="true" />
                 <label asp-for="Input.Birthday"></label>
                 <span asp-validation-for="Input.Birthday" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.Email"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -66,7 +66,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-outline-info w-50 offset-3" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">Regiter with @provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-outline-info w-50 offset-3" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">Register with @provider.DisplayName</button>
                                 }
                             </p>
                         </div>

@@ -5,8 +5,8 @@
 }
 
 
-<div class="w-50 offset-3">
-    <div class="d-flex justify-content-between align-items-center">
+<div class="w-75 offset-2">
+    <div class="d-flex justify-content-between align-items-center w-100">
         <h1>Movies</h1>
         @if (User.IsInRole("Administrator"))
         {
@@ -49,13 +49,13 @@
                     <td>
                         <a class="text-decoration-none text-primary" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
                     </td>
-                    <td>
+                    <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td>
+                    <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
                         @Html.DisplayFor(modelItem => item.CoverImage)
                     </td>
-                    <td>
+                    <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
                         @Html.DisplayFor(modelItem => item.MovieLink)
                     </td>
                     <td>
