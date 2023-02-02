@@ -26,10 +26,31 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: CastCrews
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg=1)
         {
-                //return View(await _context.CastCrew.ToListAsync());
-                return View(await _context.CastCrew.Include(a => a.Role).ToListAsync());
+            //return View(await _context.CastCrew.Include(a => a.Role).ToListAsync());
+
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            List<CastCrew> castCrews =await _context.CastCrew.Include(a => a.Role).ToListAsync();
+
+
+            int recsCount = castCrews.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var data = castCrews.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
+
+            //return View(await _context.CastCrew.ToListAsync());
+            
         }
 
         // GET: CastCrews/Details/5
