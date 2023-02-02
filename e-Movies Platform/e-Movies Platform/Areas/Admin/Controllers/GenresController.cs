@@ -9,6 +9,8 @@ using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
 using Microsoft.AspNetCore.Authorization;
 
+
+
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -24,9 +26,26 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 
         // GET: Genres
         [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int pg = 1)
         {
-              return View(await _context.Genre.ToListAsync());
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            List<Genre> genres = _context.Genre.ToList();
+
+            int recsCount = genres.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var data = genres.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
+            //return View(await _context.Genre.ToListAsync());
         }
 
         // GET: Genres/Details/5
