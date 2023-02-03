@@ -24,15 +24,32 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: CastCrewRoles
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg=1, string searchString = "", string sortOrder = "")  
         {
-
+            ViewData["RoleSortParm"] = sortOrder == "Role" ? "role_desc" : "Role";
+            ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
             List<CastCrewRole> castCrewRoles =await _context.CastCrewRole.ToListAsync();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                castCrewRoles = await _context.CastCrewRole.Where(c => c.Role.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
 
+            if (!String.IsNullOrEmpty(sortOrder)) 
+            { 
+                switch(sortOrder)
+                {
+                    case "Role":
+                        castCrewRoles = await _context.CastCrewRole.OrderBy(c => c.Role).ToListAsync();
+                        break;
+                    case "role_desc":
+                        castCrewRoles = await _context.CastCrewRole.OrderByDescending(c => c.Role).ToListAsync();
+                        break;
+                }
+            }
 
             int recsCount = castCrewRoles.Count();
 
