@@ -30,7 +30,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index(int pg = 1, string searchString = "", string sortOrder = "")
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
             ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
@@ -43,16 +43,16 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
                 users = await _context.Users.Where(m => m.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
             }
 
-            if (String.IsNullOrEmpty(sortOrder))
+            if (!String.IsNullOrEmpty(sortOrder))
             {
                 switch (sortOrder)
                 {
-                    case "name_desc":
-                        users = await _context.Users.OrderByDescending(m => m.Name).ToListAsync();
-                        break;
-                    default:
+                    case "Name":
                         users = await _context.Users.OrderBy(m => m.Name).ToListAsync();
                         break;
+                    case "name_desc":
+                        users = await _context.Users.OrderByDescending(m => m.Name).ToListAsync();
+                        break;                 
                 }
             }
 
