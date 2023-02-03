@@ -34,7 +34,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("CastCrewMovie");
+                    b.ToTable("CastCrewMovie", (string)null);
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.ApplicationUser", b =>
@@ -136,7 +136,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasIndex("Roleid");
 
-                    b.ToTable("CastCrew");
+                    b.ToTable("CastCrew", (string)null);
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.CastCrewRole", b =>
@@ -152,7 +152,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("CastCrewRole");
+                    b.ToTable("CastCrewRole", (string)null);
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.Genre", b =>
@@ -168,7 +168,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genre");
+                    b.ToTable("Genre", (string)null);
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.Movie", b =>
@@ -204,7 +204,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Movie");
+                    b.ToTable("Movie", (string)null);
                 });
 
             modelBuilder.Entity("e_Movies_Platform.Models.Subscription", b =>
@@ -224,7 +224,7 @@ namespace e_Movies_Platform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscription");
+                    b.ToTable("Subscription", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
