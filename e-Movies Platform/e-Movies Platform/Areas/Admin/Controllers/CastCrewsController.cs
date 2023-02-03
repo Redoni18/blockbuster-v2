@@ -46,7 +46,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             {
                 switch (sortOrder)
                 {
-                    case "Fullname":
+                    case "FullName":
                         castCrews = await _context.CastCrew.OrderBy(m => m.FullName).ToListAsync();
                         break;
                     case "fullName_desc":
