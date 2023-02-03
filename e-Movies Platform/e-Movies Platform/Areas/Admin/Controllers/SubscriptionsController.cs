@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
 using e_Movies_Platform.Data.Migrations;
+using Microsoft.Data.SqlClient;
 
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
@@ -22,8 +23,9 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: Admin/Subscriptions
-        public async Task<IActionResult> Index(int pg = 1, string searchString = "")
+        public async Task<IActionResult> Index(int pg = 1, string searchString = "", string sortOrder = "")
         {
+            ViewData["DateSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
             ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
@@ -33,6 +35,19 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 subscriptions = await _context.Subscription.Where(m => m.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
+
+            if(!String.IsNullOrEmpty(sortOrder))
+            {
+                switch(sortOrder)
+                {
+                    case "Price":
+                        subscriptions = await _context.Subscription.OrderBy(m => m.Price).ToListAsync();
+                        break;
+                    case "price_desc":
+                        subscriptions = await _context.Subscription.OrderByDescending(m => m.Price).ToListAsync();
+                        break;
+                }
             }
 
             int recsCount = subscriptions.Count();
