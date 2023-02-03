@@ -24,9 +24,29 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: CastCrewRoles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg=1)
         {
-              return View(await _context.CastCrewRole.ToListAsync());
+
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            List<CastCrewRole> castCrewRoles =await _context.CastCrewRole.ToListAsync();
+
+
+            int recsCount = castCrewRoles.Count();
+
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var data = castCrewRoles.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
+
+            //return View(await _context.CastCrewRole.ToListAsync());
         }
 
         // GET: CastCrewRoles/Details/5
