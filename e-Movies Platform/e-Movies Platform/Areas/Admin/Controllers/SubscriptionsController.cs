@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
+using e_Movies_Platform.Data.Migrations;
 
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
@@ -21,9 +22,29 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: Admin/Subscriptions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1, string searchString = "")
         {
-              return View(await _context.Subscription.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+
+            List<Subscription> subscriptions = _context.Subscription.ToList();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                subscriptions = await _context.Subscription.Where(m => m.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
+
+            int recsCount = subscriptions.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+
+            var data = subscriptions.Skip(recSkip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
         }
 
         // GET: Admin/Subscriptions/Details/5
