@@ -30,14 +30,19 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 
         // GET: Movies
         //[Authorize]
-        public async Task<IActionResult> Index(int pg = 1)
+        public async Task<IActionResult> Index(int pg = 1, string searchString = "")
         {
+            ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
             List<Movie> movies = await _context.Movie.Include(m => m.Genre).Include(m => m.Cast).ToListAsync();
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                movies = await _context.Movie.Where(m => m.Title.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
 
             int recsCount = movies.Count();
 
