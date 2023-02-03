@@ -48,8 +48,8 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        <a class="text-decoration-none text-primary" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.Name)</a>
+                    <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
                         @Html.DisplayFor(modelItem => item.LastName)
@@ -80,4 +80,4 @@
 </div>
 
 
-<partial name="_PagerMovies" model="@pager" />
+<partial name="_PagerUser" model="@pager" />
