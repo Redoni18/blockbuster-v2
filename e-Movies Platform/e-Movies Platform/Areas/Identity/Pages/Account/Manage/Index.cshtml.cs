@@ -43,6 +43,9 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account.Manage
             public string LastName { get; set; }
             [Display(Name = "Username")]
             public string Username { get; set; }
+            [DataType(DataType.Date)]
+            [Display(Name = "Birthday")]
+            public DateTime? Birthday { get; set; }
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -56,6 +59,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var firstName = user.Name;
             var lastName = user.LastName;
+            var birthday = user.Birthday;
             //var profilePicture = user.ProfilePicture;
             Username = userName;
 
@@ -65,6 +69,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account.Manage
                 Username = userName,
                 Name = firstName,
                 LastName = lastName,
+                Birthday = birthday,
                 //ProfilePicture = profilePicture
             };
         }
@@ -114,6 +119,7 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account.Manage
             }
             var firstName = user.Name;
             var lastName = user.LastName;
+            var birthday = user.Birthday;
             if (Input.Name != firstName)
             {
 
@@ -123,6 +129,11 @@ namespace e_Movies_Platform.Areas.Identity.Pages.Account.Manage
             if (Input.LastName != lastName)
             {
                 user.LastName = Input.LastName;
+                await _userManager.UpdateAsync(user);
+            }
+            if (Input.Birthday != birthday)
+            {
+                user.Birthday = Input.Birthday;
                 await _userManager.UpdateAsync(user);
             }
 
