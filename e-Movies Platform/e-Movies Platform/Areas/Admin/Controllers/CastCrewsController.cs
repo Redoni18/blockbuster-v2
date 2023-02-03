@@ -169,6 +169,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
             }
             var castCrewRole = await this._context.CastCrewRole.FindAsync(model.RoleId);
 
+            castCrew.FullName = model.FullName;
             castCrew.Role = castCrewRole;
 
             if (ModelState.IsValid)
