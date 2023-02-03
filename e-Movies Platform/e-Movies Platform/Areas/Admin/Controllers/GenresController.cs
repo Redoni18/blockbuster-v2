@@ -26,13 +26,34 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 
         // GET: Genres
         [Authorize]
-        public IActionResult Index(int pg = 1)
+        public IActionResult Index(int pg = 1, string searchString = "", string sortOrder = "")
         {
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
             List<Genre> genres = _context.Genre.ToList();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                genres = _context.Genre.Where(c => c.GenreName.ToLower().Contains(searchString.ToLower())).ToList();
+            }
+
+            if(!String.IsNullOrEmpty(sortOrder))
+            {
+                switch (sortOrder)
+                {
+                    case "Name":
+                        genres =  _context.Genre.OrderBy(c => c.GenreName).ToList();
+                        break;
+                    case "name_desc":
+                        genres =  _context.Genre.OrderByDescending(c => c.GenreName).ToList();
+                        break;
+                }
+            }
+
+
 
             int recsCount = genres.Count();
 
