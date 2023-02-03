@@ -33,7 +33,8 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         public async Task<IActionResult> Index(int pg = 1, string searchString = "", string sortOrder = "")
         {
 
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Year" ? "year_desc" : "Year";
             ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
@@ -47,20 +48,23 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
                 movies = await _context.Movie.Where(m => m.Title.ToLower().Contains(searchString.ToLower())).ToListAsync();
             }
 
-            switch (sortOrder)
+            if(!String.IsNullOrEmpty(sortOrder))
             {
-                case "name_desc":
-                    movies = await _context.Movie.OrderByDescending(m => m.Title).ToListAsync();
-                    break;
-                case "Year":
-                    movies = await _context.Movie.OrderBy(m => m.Year).ToListAsync();
-                    break;
-                case "year_desc":
-                    movies = await _context.Movie.OrderByDescending(m => m.Year).ToListAsync();
-                    break;
-                default:
-                    movies = await _context.Movie.OrderBy(m => m.Title).ToListAsync();
-                    break;
+                switch (sortOrder)
+                {
+                    //case "name_desc":
+                    //    movies = await _context.Movie.OrderByDescending(m => m.Title).ToListAsync();
+                    //    break;
+                    case "Year":
+                        movies = await _context.Movie.OrderBy(m => m.Year).ToListAsync();
+                        break;
+                    case "year_desc":
+                        movies = await _context.Movie.OrderByDescending(m => m.Year).ToListAsync();
+                        break;
+                    //default:
+                    //    movies = await _context.Movie.OrderBy(m => m.Title).ToListAsync();
+                    //    break;
+                }
             }
 
 

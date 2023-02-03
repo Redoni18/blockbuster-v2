@@ -38,7 +38,7 @@
         <thead>
             <tr>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Title)</a>
+                    @Html.DisplayNameFor(model => model.Title)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
