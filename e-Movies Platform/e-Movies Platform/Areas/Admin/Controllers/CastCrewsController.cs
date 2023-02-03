@@ -10,6 +10,7 @@ using e_Movies_Platform.Models;
 using e_Movies_Platform.ViewModels;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Authorization;
+using Razorpay.Api;
 
 namespace e_Movies_Platform.Areas.Admin.Controllers
 {
@@ -26,16 +27,33 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
         }
 
         // GET: CastCrews
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg=1, string searchString = "", string sortOrder = "")
         {
             //return View(await _context.CastCrew.Include(a => a.Role).ToListAsync());
-
+            ViewData["StringSortParm"] = sortOrder == "FullName" ? "fullName_desc" : "FullName";
+            ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
 
             List<CastCrew> castCrews =await _context.CastCrew.Include(a => a.Role).ToListAsync();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                castCrews = await _context.CastCrew.Where(m => m.FullName.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
 
+            if (!String.IsNullOrEmpty(sortOrder))
+            {
+                switch (sortOrder)
+                {
+                    case "Fullname":
+                        castCrews = await _context.CastCrew.OrderBy(m => m.FullName).ToListAsync();
+                        break;
+                    case "fullName_desc":
+                        castCrews = await _context.CastCrew.OrderByDescending(m => m.FullName).ToListAsync();
+                        break;
+                }
+            }
 
             int recsCount = castCrews.Count();
 
