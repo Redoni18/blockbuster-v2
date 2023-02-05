@@ -1,0 +1,25 @@
+﻿@model IEnumerable<e_Movies_Platform.Models.Subscription>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="w-50 offset-3">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Choose Your Subscription</h1>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+    @foreach (var item in Model){
+            <div type="submit" class="card text-white bg-secondary mb-3" style="max-width: 20rem; width: 10rem">
+                <div class="card-header">@Html.DisplayFor(modelItem => item.Name)</div>
+                <div class="card-body">
+                    <h4 class="card-title">Price</h4>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Price)$</p>
+                </div>
+            </div>
+    }
+    </div>
+</div>
+

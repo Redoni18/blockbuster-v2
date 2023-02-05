@@ -13,5 +13,6 @@ namespace e_Movies_Platform.Models
         [DataType(DataType.Date)]
         public DateTime? Birthday { get; set; }
         public byte[]? ProfilePicture { get; set; }
+        public bool? isSubscribed { get; set; }
     }
 }
