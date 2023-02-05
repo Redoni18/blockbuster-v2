@@ -25,11 +25,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if(User.Identity.IsAuthenticated)
+                        @if(User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
                         {
                             <li class="nav-item">
                                 <partial name="_AdminMenuPartial" />
                             </li>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Default"))
+                        {
+                            <partial name="_UserMenuPartial" />
                         }
                         
                         @*@if(User.Identity.IsAuthenticated)
