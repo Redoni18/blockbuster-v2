@@ -23,9 +23,9 @@ namespace e_Movies_Platform.Areas.User.Controllers
 
             return View(subscriptions);
         }
-        //[Area("User")]
+        [Area("User")]
         //[HttpPost]
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> Subscribe()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -34,8 +34,9 @@ namespace e_Movies_Platform.Areas.User.Controllers
             }
 
             user.isSubscribed = true;
+            await _userManager.UpdateAsync(user);
 
-            return View();
+            return RedirectToAction("Index", "Userarea");
         }
     }
 }
