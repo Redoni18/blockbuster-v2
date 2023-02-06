@@ -12,14 +12,16 @@
     </div>
     <form method="post" class="d-flex justify-content-between align-items-center">
     @foreach (var item in Model){
-            <div class="card text-white bg-secondary mb-3" style="max-width: 20rem; width: 10rem">
-                <a type="submit" asp-action="Subscribe" class="card-header">@Html.DisplayFor(modelItem => item.Name)</a>
+            <div  class="card text-white bg-secondary mb-3" style="max-width: 20rem; width: 10rem">
+                <div class="card-header">@Html.DisplayFor(modelItem => item.Name)</div>
                 <div class="card-body">
                     <h4 class="card-title">Price</h4>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Price)$</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubscription">Buy</button>
                 </div>
             </div>
     }
     </form>
 </div>
 
+@await Html.PartialAsync("_PaymentView")

@@ -24,6 +24,11 @@ namespace e_Movies_Platform.Areas.User.Controllers
             return View(subscriptions);
         }
         [Area("User")]
+        public IActionResult Pay()
+        {
+            return PartialView("_PaymentView");
+        }
+        [Area("User")]
         //[HttpPost]
         public async Task<IActionResult> Subscribe()
         {

@@ -1,0 +1,45 @@
+﻿<div class="modal fade" tabindex="-1" id="addSubscription">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form>
+            <div class="modal-body">
+                <div class="form-group row m-4">
+                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputName" placeholder="Name" required>
+                    </div>
+                </div>
+                    <div class="form-group row m-4">
+                    <label for="inputSurname" class="col-sm-2 col-form-label">Surname</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputSurname" placeholder="Surname">
+                    </div>
+                </div>
+                    <div class="form-group row m-4">
+                        <label for="inputSurname" class="col-sm-2 col-form-label">Card Number</label>
+                        <div class="col-sm-10">
+                            <input style="margin-top:10px" type="number" class="form-control" id="inputSurname" placeholder="Card Number">
+                        </div>
+                    </div>
+                    <div class="form-group row m-4">
+                    <label for="inputCVV" class="col-sm-2 col-form-label">CVV</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputCVV" placeholder="CVV">
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="modal-footer">
+                <a type ="button" asp-action="Subscribe" class="btn btn-primary">
+                    Buy now!</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
