@@ -9,6 +9,7 @@ using e_Movies_Platform.Data;
 using e_Movies_Platform.Models;
 using Microsoft.Data.SqlClient;
 using e_Movies_Platform.Data.Migrations;
+using Microsoft.AspNetCore.Identity;
 
 namespace e_Movies_Platform.Areas.User.Controllers
 {
@@ -16,10 +17,15 @@ namespace e_Movies_Platform.Areas.User.Controllers
     public class WishListsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public WishListsController(ApplicationDbContext context)
+        public WishListsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: User/WishLists
@@ -96,6 +102,8 @@ namespace e_Movies_Platform.Areas.User.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Year,Genre")] WishList wishList)
         {
+            var user = await _userManager.GetUserAsync(User);
+            wishList.User = user;
             if (ModelState.IsValid)
             {
                 _context.Add(wishList);
@@ -132,6 +140,9 @@ namespace e_Movies_Platform.Areas.User.Controllers
             {
                 return NotFound();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            wishList.User = user;
 
             if (ModelState.IsValid)
             {

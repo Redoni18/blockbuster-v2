@@ -58,37 +58,38 @@
             {
                 <tr>
                     <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="Wishlist-details">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </a>
-                        </td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="genre-details">
-                                @Html.DisplayFor(modelItem => item.Year)
-                            </a>
-                        </td>
-                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="genre-details">
-                                @Html.DisplayFor(modelItem => item.Genre)
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="genre-details" >
-                                @Html.DisplayFor(modelItem => item.Isapproved)
-                            </a>
-                        </td>
+                        @Html.DisplayFor(modelItem => item.Genre)
+                    </td>
+                    <td>
+                        @if(item.Isapproved.GetValueOrDefault()){
+                            <p>Approved</p>
+                        }else{
+                            <p>Not Approved</p>
+                        }
+                    </td>
 
-                            <td>
-                                <div class="d-flex align-items-center gap-2 justify-content-end">
-                                    <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                </div>
+                    <td>
+                        <div class="d-flex align-items-center gap-2 justify-content-end">
+                            @if(!item.Isapproved.GetValueOrDefault()){
+                                <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }else{
+                            <a class="btn btn-sm btn-info disabled" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-sm btn-danger disabled" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                        </div>
 
-                            </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <partial name="_WishListPager" model="@pager" />

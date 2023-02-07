@@ -1,0 +1,139 @@
+﻿@*@model IEnumerable<e_Movies_Platform.Models.ApplicationUser>*@
+@model IEnumerable<e_Movies_Platform.Models.WishList>
+@{
+    ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+
+<div class="w-75 offset-2">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" data-bs-toggle="tab" href="#notapproved" aria-selected="true" role="tab">Not Approved</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" data-bs-toggle="tab" href="#approved" aria-selected="false" role="tab" tabindex="-1">Approved</a>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active show" id="notapproved" role="tabpanel">
+            <form class="d-flex justify-content-between" asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <input placeholder="Search User" type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default" /> |
+                    <a asp-action="Index">Back to Full List</a>
+                </div>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Movie @Html.DisplayNameFor(model => model.Name)</a>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Genre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Year)
+                        </th>
+                        <th>
+                            User @Html.DisplayNameFor(model => model.User.Email)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                        if (!item.Isapproved.GetValueOrDefault())
+                    {
+                        <tr>
+                            <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                @Html.DisplayFor(modelItem => item.Genre)
+                            </td>
+                            <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                @Html.DisplayFor(modelItem => item.Year)
+                            </td>
+                            <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                @Html.DisplayFor(modelItem => item.User.Email)
+                            </td>                    
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 justify-content-end">
+                                        <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">Approve</a>
+                                    </div>
+
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="approved" role="tabpanel">
+            <form class="d-flex justify-content-between" asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <input placeholder="Search User" type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default" /> |
+                    <a asp-action="Index">Back to Full List</a>
+                </div>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Movie @Html.DisplayNameFor(model => model.Name)</a>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Genre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Year)
+                        </th>
+                        <th>
+                            User @Html.DisplayNameFor(model => model.User.Email)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                        if (item.Isapproved.GetValueOrDefault())
+                        {
+                            <tr>
+                                <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td style="max-width: 150px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                    @Html.DisplayFor(modelItem => item.Genre)
+                                </td>
+                                <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                    @Html.DisplayFor(modelItem => item.Year)
+                                </td>
+                                <td style="max-width: 200px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap;">
+                                    @Html.DisplayFor(modelItem => item.User.Email)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 justify-content-end">
+                                        <p class="btn btn-sm btn-success disabled">Approved</p>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<partial name="_PagerRequests" model="@pager" />
