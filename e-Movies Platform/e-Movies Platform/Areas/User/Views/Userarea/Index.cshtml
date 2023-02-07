@@ -1,7 +1,46 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<e_Movies_Platform.Models.Movie>
+
 @{
+    ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
 
-<h1>User area</h1>
+<form asp-action="Index" method="get" class="w-50 offset-3 mt-5">
+    <div class="form-actions">
+        <div class="form-group d-flex gap-3 justify-content-center align-items-center">
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search movie titles..." id="inputDefault">
+            <a class="btn btn-info back-button" asp-action="Index">Back</a>
+        </div>
+
+    </div>
+</form>
+
+<div class="container w-75 d-flex justify-content-center mt-4">
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+           <div class="col-sm mt-2">
+                <div class="card" style="width: 18rem;">
+                    <a class="text-decoration-none text-black" asp-action="MovieDetails" asp-route-id="@item.Id">
+                        <img class="card-img-top" src="@item.CoverImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        </div>
+                    </a>
+                </div>
+           </div>
+        }
+    </div>
+</div>
+
+<partial name="_PagerUserMovies" model="@pager" />
