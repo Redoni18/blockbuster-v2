@@ -9,6 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\NewFolder1\**" />
+    <Compile Remove="Areas\Admin\Views\NewFolder\**" />
+    <Compile Remove="Areas\Admin\Views\Wishlists\**" />
+    <Content Remove="Areas\Admin\Views\NewFolder1\**" />
+    <Content Remove="Areas\Admin\Views\NewFolder\**" />
+    <Content Remove="Areas\Admin\Views\Wishlists\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\NewFolder1\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\NewFolder\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Wishlists\**" />
+    <None Remove="Areas\Admin\Views\NewFolder1\**" />
+    <None Remove="Areas\Admin\Views\NewFolder\**" />
+    <None Remove="Areas\Admin\Views\Wishlists\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Remove="Controllers\CastCrewRolesController.cs" />
     <Compile Remove="Controllers\CastCrewsController.cs" />
@@ -40,7 +55,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
-    <Folder Include="Areas\User\Views\Shared\" />
   </ItemGroup>
 
 </Project>
