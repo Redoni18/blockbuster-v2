@@ -1,0 +1,30 @@
+@model IEnumerable<e_Movies_Platform.Models.WishList>
+@{
+
+}
+<div class="w-50 offset-3">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a @Html.DisplayNameFor(model => model.Name)</a>
+                </th>
+
+                <th>
+                    <a> @Html.DisplayNameFor(model => model.Year) </a>
+
+                </th>
+                <th>
+                    <a> @Html.DisplayNameFor(model => model.Genre) </a>
+                </th>
+                <th>
+                    <a> Status </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@await Html.PartialAsync("WishlistView")

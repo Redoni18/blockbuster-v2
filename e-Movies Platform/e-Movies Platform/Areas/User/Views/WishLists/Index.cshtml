@@ -1,0 +1,95 @@
+﻿@model IEnumerable<e_Movies_Platform.Models.WishList>
+
+@{
+    ViewData["Title"] = "Index";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+
+<div class="w-50 offset-3">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Wishlist</h1>
+
+        <p class="m-0">
+            <a class="btn btn-primary" asp-action="Create">Create New</a>
+        </p>
+    </div>
+
+    <form class="d-flex justify-content-between" asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <input placeholder="Search Movie Name" type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </div>
+    </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["StringSortParm"]"> @Html.DisplayNameFor(model => model.Name)</a>
+                    </th>
+      
+                    <th>
+                        <a> @Html.DisplayNameFor(model => model.Year) </a>
+
+                    </th>
+                    <th>
+                        <a> @Html.DisplayNameFor(model => model.Genre) </a>
+                    </th>
+                <th>
+                    <a> Status </a>
+                </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.Genre)
+                    </td>
+                    <td>
+                        @if(item.Isapproved.GetValueOrDefault()){
+                            <p>Approved</p>
+                        }else{
+                            <p>Not Approved</p>
+                        }
+                    </td>
+
+                    <td>
+                        <div class="d-flex align-items-center gap-2 justify-content-end">
+                            @if(!item.Isapproved.GetValueOrDefault()){
+                                <a class="btn btn-sm btn-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }else{
+                            <a class="btn btn-sm btn-info disabled" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-sm btn-danger disabled" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_WishListPager" model="@pager" />
