@@ -5,22 +5,25 @@
 }
 
 
-<div class="w-50 offset-3">
 
-    <div class="d-flex justify-content-between align-items-center">
+
+    <div class="title" style="text-align:center">
         <h1>Choose Your Subscription</h1>
     </div>
-    <form method="post" class="d-flex justify-content-between align-items-center">
+<div class="w-50 offset-3">
+    
+        <form method="post" class="d-flex justify-content-between align-items-center">
     @foreach (var item in Model){
-            <div  class="card text-white bg-secondary mb-3" style="max-width: 20rem; width: 10rem">
-                <div class="card-header">@Html.DisplayFor(modelItem => item.Name)</div>
+            <div class="card border-primary mb-3" style="max-width: 20rem; width: 12rem; margin-top:50px">
+                <div class="card-header" style="text-align:center; font-size:25px">@Html.DisplayFor(modelItem => item.Name)</div>
                 <div class="card-body">
-                    <h4 class="card-title">Price</h4>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Price)$</p>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubscription">Buy</button>
+                    <h4 class="card-title" style="text-align:center; font-size:23">Price</h4>
+                    <p class="card-text" style="text-align:center; font-size:20px">@Html.DisplayFor(modelItem => item.Price)$</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubscription" style="margin-left:3px; width:150px">Buy</button>
                 </div>
             </div>
     }
+    
     </form>
 </div>
 
