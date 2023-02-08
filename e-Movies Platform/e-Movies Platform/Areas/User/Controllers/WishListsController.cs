@@ -38,10 +38,10 @@ namespace e_Movies_Platform.Areas.User.Controllers
             if (pg < 1)
                 pg = 1;
 
-            List<WishList> wishlist =  _context.WishList.ToList();
+            List<WishList> wishlist = await _context.WishList.ToListAsync();
             if(!String.IsNullOrEmpty(searchString))
             {
-                wishlist = _context.WishList.Where(c => c.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                wishlist = await _context.WishList.Where(c => c.Name.ToLower().Contains(searchString.ToLower())).ToListAsync();
             }
 
             if (!String.IsNullOrEmpty(sortOrder))
@@ -49,10 +49,10 @@ namespace e_Movies_Platform.Areas.User.Controllers
                 switch (sortOrder)
                 {
                     case "Movie":
-                        wishlist = _context.WishList.OrderBy(c => c.Name).ToList();
+                        wishlist = await _context.WishList.OrderBy(c => c.Name).ToListAsync();
                         break;
                     case "movie_desc":
-                        wishlist = _context.WishList.OrderByDescending(c => c.Name).ToList();
+                        wishlist = await _context.WishList.OrderByDescending(c => c.Name).ToListAsync();
                         break;
                 }
             }

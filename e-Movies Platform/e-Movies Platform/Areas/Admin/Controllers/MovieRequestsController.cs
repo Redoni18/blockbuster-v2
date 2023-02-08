@@ -30,7 +30,7 @@ namespace e_Movies_Platform.Areas.Admin.Controllers
 
 
             //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
             ViewData["CurrentFilter"] = searchString;
             const int pageSize = 5;
             if (pg < 1)
